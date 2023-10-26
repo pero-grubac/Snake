@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace Snake
 {
@@ -20,6 +16,7 @@ namespace Snake
         private readonly Random random = new Random();
         private readonly LinkedList<Direction> directionChanges = new LinkedList<Direction>();
 
+        public bool IsPaused { get; set; }
         public GameState(int rows, int columns)
         {
             Rows = rows;
@@ -28,6 +25,7 @@ namespace Snake
             Direction = Direction.Right;
             AddSnake();
             AddFood();
+            IsPaused = false;
         }
         private void AddSnake()
         {
@@ -125,28 +123,41 @@ namespace Snake
         }
         public void Move()
         {
-            if(directionChanges.Count > 0)
+            if (directionChanges.Count > 0)
             {
                 Direction = directionChanges.First.Value;
                 directionChanges.RemoveFirst();
             }
             Position newHeadPosition = HeadPosition().Translate(Direction);
             GridValue hit = WillHit(newHeadPosition);
-
-            if (hit == GridValue.Outside || hit == GridValue.Snake)
+            if (!IsPaused)
             {
-                GameOver = true;
+                if (hit == GridValue.Outside || hit == GridValue.Snake)
+                {
+                    GameOver = true;
+                }
+                else if (hit == GridValue.Emplty)
+                {
+                    RemoveTail();
+                    AddHead(newHeadPosition);
+                }
+                else if (hit == GridValue.Food)
+                {
+                    AddHead(newHeadPosition);
+                    Score++;
+                    AddFood();
+                }
             }
-            else if (hit == GridValue.Emplty)
+        }
+        public void SwitchPause()
+        {
+            if (IsPaused)
             {
-                RemoveTail();
-                AddHead(newHeadPosition);
+                IsPaused = false;
             }
-            else if (hit == GridValue.Food)
+            else
             {
-                AddHead(newHeadPosition);
-                Score++;
-                AddFood();
+                IsPaused = true;
             }
         }
     }

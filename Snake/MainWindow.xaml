@@ -24,7 +24,6 @@
             <TextBlock x:Name="ScoreText"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
-               Text="SCORE 0"
                FontSize="22"
                Margin="10"/>
 

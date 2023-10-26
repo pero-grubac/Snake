@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
 
 namespace Snake
 {
@@ -23,7 +18,7 @@ namespace Snake
         private readonly int rows = 15;
         private readonly int columns = 15;
         private readonly Image[,] gridImages;
-
+        private int highestScore;
         private readonly Dictionary<GridValue, ImageSource> gridValueToImage = new Dictionary<GridValue, ImageSource>
         {
             {GridValue.Emplty,Images.Empty },
@@ -40,18 +35,25 @@ namespace Snake
 
         private GameState gameState;
         private bool gameRunning;
+        private bool isPaused = false;
+
+        private static string directory = Directory.GetCurrentDirectory();
+        private static string pathToScore = System.IO.Path.Combine(directory, "score.txt");
+        private static string screenshotDirectory = Directory.GetCurrentDirectory();
         public MainWindow()
         {
             InitializeComponent();
             gridImages = SetupGrid();
             gameState = new GameState(rows, columns);
+            ReadHighestScore();
+            ScoreText.Text = $"HIGHEST SCORE {highestScore} SCORE 0";
         }
         private Image[,] SetupGrid()
         {
             Image[,] images = new Image[rows, columns];
             GameGrid.Rows = rows;
             GameGrid.Columns = columns;
-            GameGrid.Width = GameGrid.Height*(columns/(double)rows);
+            GameGrid.Width = GameGrid.Height * (columns / (double)rows);
 
             for (int r = 0; r < rows; r++)
             {
@@ -85,8 +87,51 @@ namespace Snake
         {
             DrawGrid();
             DrawSnakeHad();
-            ScoreText.Text = $"SCORE {gameState.Score}";
+            ScoreText.Text = $"HIGHEST SCORE {highestScore} SCORE {gameState.Score}";
 
+        }
+        private void ReadHighestScore()
+        {
+            try
+            {
+                if (File.Exists(pathToScore))
+                {
+                    using (StreamReader reader = new StreamReader(pathToScore))
+                    {
+                        string line = reader.ReadLine();
+                        if (line != null)
+                        {
+                            try
+                            {
+                                highestScore = int.Parse(line);
+                            }
+                            catch (FormatException)
+                            {
+                                File.WriteAllText(pathToScore, "0");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(pathToScore);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+        private void WriteHighestScore(int score)
+        {
+            try
+            {
+                File.WriteAllText(pathToScore, score.ToString());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
         private void DrawSnakeHad()
         {
@@ -115,6 +160,7 @@ namespace Snake
             {
                 return;
             }
+
             switch (e.Key)
             {
                 case Key.Left:
@@ -129,8 +175,28 @@ namespace Snake
                 case Key.Down:
                     gameState.ChangeDirection(Direction.Down);
                     break;
+                case Key.P:
+                    gameState.SwitchPause();
+                    break;
+                case Key.S:
+                    CaptureScreenshot();
+                    break;
             }
         }
+        private void CaptureScreenshot()
+        {
+            string fileName = "snake_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
+            string filePath = Path.Combine(screenshotDirectory, fileName);
+            RenderTargetBitmap renderTarget = new RenderTargetBitmap((int)Width, (int)Height, 96, 96, PixelFormats.Pbgra32);
+            renderTarget.Render(this);
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(renderTarget));
+            using (FileStream stream = new FileStream(filePath, FileMode.Create))
+            {
+                encoder.Save(stream);
+            }
+        }
+
         private async Task GameLoop()
         {
             while (!gameState.GameOver)
@@ -175,11 +241,19 @@ namespace Snake
         }
         private async Task ShowGameOver()
         {
-            DrawDeadSnake(); 
+            DrawDeadSnake();
             await Task.Delay(1000);
             Overlay.Visibility = Visibility.Visible;
-            
-            OverlayText.Text = "GAME OVER \n PRESS ANY KEY TO START";
+            if (gameState.Score < highestScore)
+            {
+                OverlayText.Text = "GAME OVER \n PRESS ANY KEY TO START";
+            }
+            else
+            {
+                highestScore = gameState.Score;
+                OverlayText.Text = $"NEW HIGHEST SCORE {highestScore}\nPRESS ANY KEY TO START";
+                WriteHighestScore(highestScore);
+            }
             OverlayText.TextAlignment = TextAlignment.Center;
         }
 
