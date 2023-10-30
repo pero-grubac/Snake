@@ -255,7 +255,7 @@ namespace Snake
         }
         private async Task ShowGameOver()
         {
-            DrawDeadSnake();
+            await DrawDeadSnake();
             await Task.Delay(1000);
             Overlay.Visibility = Visibility.Visible;
             if (gameState.Score < highestScore)
@@ -271,6 +271,18 @@ namespace Snake
             OverlayText.TextAlignment = TextAlignment.Center;
         }
 
-
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Settings.Content == null)
+            {
+                // Show the settings user control
+                Settings.Content = new Settings();
+            }
+            else
+            {
+                // Hide the settings user control
+                Settings.Content = null;
+            }
+        }
     }
 }
