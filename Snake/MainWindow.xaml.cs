@@ -39,14 +39,14 @@ namespace Snake
 
         private static string directory = Directory.GetCurrentDirectory();
         private static string pathToScore = System.IO.Path.Combine(directory, "score.txt");
-        private static string screenshotDirectory = Directory.GetCurrentDirectory();
+        private static string screenshotDirectory = System.IO.Path.Combine(directory, "Screenshots");
         public MainWindow()
         {
             InitializeComponent();
             gridImages = SetupGrid();
             gameState = new GameState(rows, columns);
             ReadHighestScore();
-            ScoreText.Text = $"HIGHEST SCORE {highestScore} SCORE 0";
+            ScoreText.Text = $"CURRENT SCORE 0 HIGHEST SCORE {highestScore}";
         }
         private Image[,] SetupGrid()
         {
@@ -87,7 +87,7 @@ namespace Snake
         {
             DrawGrid();
             DrawSnakeHad();
-            ScoreText.Text = $"HIGHEST SCORE {highestScore} SCORE {gameState.Score}";
+            ScoreText.Text = $"CURRENT SCORE {gameState.Score} HIGHEST SCORE {highestScore}";
 
         }
         private void ReadHighestScore()
@@ -114,7 +114,7 @@ namespace Snake
                 }
                 else
                 {
-                    MessageBox.Show(pathToScore);
+                    File.WriteAllText(pathToScore, "0");
                 }
             }
             catch (Exception e)
@@ -124,6 +124,7 @@ namespace Snake
         }
         private void WriteHighestScore(int score)
         {
+
             try
             {
                 File.WriteAllText(pathToScore, score.ToString());
@@ -132,6 +133,7 @@ namespace Snake
             {
                 MessageBox.Show(e.Message);
             }
+
         }
         private void DrawSnakeHad()
         {
@@ -191,9 +193,21 @@ namespace Snake
             renderTarget.Render(this);
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(renderTarget));
-            using (FileStream stream = new FileStream(filePath, FileMode.Create))
+            if (Directory.Exists(screenshotDirectory))
             {
-                encoder.Save(stream);
+                using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                {
+                    encoder.Save(stream);
+                }
+
+            }
+            else
+            {
+                Directory.CreateDirectory(screenshotDirectory);
+                using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                {
+                    encoder.Save(stream);
+                }
             }
         }
 
