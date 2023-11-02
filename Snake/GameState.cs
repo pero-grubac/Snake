@@ -5,8 +5,8 @@ namespace Snake
 {
     public class GameState
     {
-        public int Rows { get; }
-        public int Columns { get; }
+        public int Rows { get; set; }
+        public int Columns { get; set; }
         public GridValue[,] GridValues { get; }
         public Direction Direction { get; private set; }
         public int Score { get; private set; }

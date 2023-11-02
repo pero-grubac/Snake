@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,9 +16,21 @@ namespace Snake
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly int rows = 15;
-        private readonly int columns = 15;
-        private readonly Image[,] gridImages;
+        private int rows = 15;
+        private int columns = 15;
+        public int Rows
+        {
+            get { return rows; }
+            set { rows = value; }
+        }
+
+        public int Columns
+        {
+            get { return columns; }
+            set { columns = value; }
+        }
+
+        private  Image[,] gridImages;
         private int highestScore;
         private readonly Dictionary<GridValue, ImageSource> gridValueToImage = new Dictionary<GridValue, ImageSource>
         {
@@ -271,18 +284,15 @@ namespace Snake
             OverlayText.TextAlignment = TextAlignment.Center;
         }
 
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Settings.Content == null)
-            {
-                // Show the settings user control
-                Settings.Content = new Settings();
-            }
-            else
-            {
-                // Hide the settings user control
-                Settings.Content = null;
-            }
+            Settings settingsWindow = new Settings(this); 
+            settingsWindow.ShowDialog();
+            gameState = new GameState(rows, columns);
+            GameGrid.Children.Clear();
+            gridImages = SetupGrid();
+           
+            await RunGame();
         }
     }
 }
