@@ -14,73 +14,74 @@
         Icon="Slike/icon.ico"
         PreviewKeyDown="Window_PreviewKeyDown"
         KeyDown="Window_KeyDown">
+
     <Viewbox>
         <Grid>
+
             <Grid.RowDefinitions>
-
-                <RowDefinition />
-                <RowDefinition Height="27" />
-
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="34" />
             </Grid.RowDefinitions>
-            <Viewbox>
-                <Grid>
-                    <Grid.RowDefinitions>
 
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
+            <TextBlock x:Name="MapText"
+                        Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        Margin="10,10,10,0"/>
 
-                    </Grid.RowDefinitions>
+            <TextBlock x:Name="ScoreText"
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="22"
+                        Margin="10,0,10,10"/>
 
-                    <TextBlock x:Name="ScoreText"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               FontSize="22"
-               Margin="10"/>
 
-                    <Border x:Name="GridBorder"
-            Grid.Row="1"
-            BorderBrush="{StaticResource GridLineColor}"
-            BorderThickness="1.5"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            RenderOptions.EdgeMode="Aliased"
-            Margin="20,0,20,20">
-                        <UniformGrid x:Name="GameGrid"
-                     Width="400"
-                     Height="400"
-                     Background="{StaticResource GridBackgroundColor}"
-                     SnapsToDevicePixels="True"
-                     RenderOptions.BitmapScalingMode="HighQuality">
-                        </UniformGrid>
-                    </Border>
-                    <Border x:Name="Overlay"
-                    Grid.Row="1"
-                    Background="{StaticResource OverlayColor}"
-                    Width="{Binding Path=ActualWidth, ElementName=GridBorder}"
-                    Height="{Binding Path=ActualHeight, ElementName=GridBorder}"
-                    Margin="{Binding Path=Margin, ElementName=GridBorder}"
-                    RenderOptions.EdgeMode="Aliased">
-                        <TextBlock x:Name="OverlayText"
+
+            <Border x:Name="GridBorder"
+                        Grid.Row="2"
+                        BorderBrush="{StaticResource GridLineColor}"
+                        BorderThickness="1.5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        RenderOptions.EdgeMode="Aliased"
+                        Margin="20,0,20,10">
+                <UniformGrid x:Name="GameGrid"
+                             Width="400"
+                             Height="400"
+                             Background="{StaticResource GridBackgroundColor}"
+                             SnapsToDevicePixels="True"
+                             RenderOptions.BitmapScalingMode="HighQuality"/>
+            </Border>
+            <Border x:Name="Overlay"
+                        Grid.Row="2"
+                        Background="{StaticResource OverlayColor}"
+                        Width="{Binding ActualWidth, ElementName=GridBorder}"
+                        Height="{Binding ActualHeight, ElementName=GridBorder}"
+                        Margin="{Binding Margin, ElementName=GridBorder}"
+                        RenderOptions.EdgeMode="Aliased">
+                <TextBlock x:Name="OverlayText"
                            Text="PRES ANY KEY TO START"
                            FontSize="26"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            TextWrapping="Wrap"
                            />
-                    </Border>
-
-
-                </Grid>
-            </Viewbox>
+            </Border>
             <Button Content="Settings"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Top"
-        Margin="0,459,0,0"
-        Padding="5"
-            Height="27"
-         RenderTransformOrigin="0.453,1.649" Grid.RowSpan="2"
-                    Click="SettingsButton_Click"
-        />
+                Grid.Row="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Height="27"
+                    Margin="0,0,0,7"
+                Padding="5"
+                RenderTransformOrigin="0.453,1.649" Grid.RowSpan="2"
+                Click="SettingsButton_Click"/>
         </Grid>
     </Viewbox>
+
+
 </Window>
