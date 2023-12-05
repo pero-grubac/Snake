@@ -241,7 +241,9 @@ namespace Snake
         {
             string fileName = "snake_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
             string filePath = Path.Combine(screenshotDirectory, fileName);
-            RenderTargetBitmap renderTarget = new RenderTargetBitmap((int)Width, (int)Height, 96, 96, PixelFormats.Pbgra32);
+            int screenWidth = (int)SystemParameters.PrimaryScreenWidth;
+            int screenHeight = (int)SystemParameters.PrimaryScreenHeight;
+            RenderTargetBitmap renderTarget = new RenderTargetBitmap(screenWidth, screenHeight, 96, 96, PixelFormats.Pbgra32);
             renderTarget.Render(this);
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(renderTarget));
