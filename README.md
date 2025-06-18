@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <h1>🐍 Snake (Blavor) Game</h1>
+    <h1 align="center">🐍 Snake (Blavor) Game</h1>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/C%23-WinForms%2FWPF-blueviolet?logo=csharp" />
+  <img src="https://img.shields.io/badge/.NET-Windows_App-purple?logo=dotnet" />
+  <img src="https://img.shields.io/badge/Platform-Windows-blue?logo=windows" />
+  <img src="https://img.shields.io/badge/Game-Snake-green?logo=joystick" />
+  <img src="https://img.shields.io/badge/GUI-Enabled-informational?logo=visualstudio" />
+</p>
     <p>
         Snake (Blavor) is a modern adaptation of the classic Snake game. The player controls a snake (Blavor) that moves around the map, eating mice to grow longer. The game ends if the snake bites itself or collides with the map boundary. 
         The game features settings for map dimensions and displays the current score, high score for the map, and map dimensions during gameplay.
