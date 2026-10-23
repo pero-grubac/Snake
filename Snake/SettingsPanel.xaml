@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="Snake.SettingsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center">
+    <Border Style="{StaticResource Card}" Width="440">
+        <StackPanel>
+            <TextBlock Text="SETTINGS" Style="{StaticResource PanelTitle}"/>
+
+            <DockPanel Margin="0,0,0,2">
+                <TextBlock x:Name="HeightValue" DockPanel.Dock="Right" Foreground="{StaticResource AccentBrush}" FontWeight="Bold"/>
+                <TextBlock Text="HEIGHT" Style="{StaticResource Caption}"/>
+            </DockPanel>
+            <Slider x:Name="HeightSlider" ValueChanged="Slider_ValueChanged" Margin="0,0,0,10"/>
+
+            <DockPanel Margin="0,0,0,2">
+                <TextBlock x:Name="WidthValue" DockPanel.Dock="Right" Foreground="{StaticResource AccentBrush}" FontWeight="Bold"/>
+                <TextBlock Text="WIDTH" Style="{StaticResource Caption}"/>
+            </DockPanel>
+            <Slider x:Name="WidthSlider" ValueChanged="Slider_ValueChanged" Margin="0,0,0,14"/>
+
+            <TextBlock Text="SPEED" Style="{StaticResource Caption}" Margin="0,0,0,6"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                <RadioButton x:Name="SpeedSlow" Content="SLOW" GroupName="Speed" Style="{StaticResource Chip}"/>
+                <RadioButton x:Name="SpeedNormal" Content="NORMAL" GroupName="Speed" Style="{StaticResource Chip}"/>
+                <RadioButton x:Name="SpeedFast" Content="FAST" GroupName="Speed" Style="{StaticResource Chip}"/>
+                <RadioButton x:Name="SpeedProgressive" Content="SPEEDS UP" GroupName="Speed" Style="{StaticResource Chip}"/>
+            </StackPanel>
+
+            <TextBlock Text="WALLS" Style="{StaticResource Caption}" Margin="0,0,0,6"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                <RadioButton x:Name="WallsSolid" Content="SOLID" GroupName="Walls" Style="{StaticResource Chip}"/>
+                <RadioButton x:Name="WallsWrap" Content="WRAP AROUND" GroupName="Walls" Style="{StaticResource Chip}"/>
+            </StackPanel>
+
+            <CheckBox x:Name="SoundSwitch" Content="SOUND EFFECTS" Style="{StaticResource Switch}" Margin="0,0,0,18"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="SaveButton" Content="SAVE" Style="{StaticResource SmallButton}" Background="{StaticResource AccentBrush}"
+                        Foreground="{StaticResource DarkTextColor}" FontWeight="Bold" Click="SaveButton_Click"/>
+                <Button x:Name="BackButton" Content="BACK" Style="{StaticResource SmallButton}" Click="BackButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

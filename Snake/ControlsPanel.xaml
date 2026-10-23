@@ -1,0 +1,39 @@
+<UserControl x:Class="Snake.ControlsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             PreviewKeyDown="UserControl_PreviewKeyDown">
+    <Border Style="{StaticResource Card}" Width="440">
+        <StackPanel>
+            <TextBlock Text="CONTROLS" Style="{StaticResource PanelTitle}"/>
+
+            <Grid x:Name="MovementGrid" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <Border Height="1" Background="{StaticResource CardBorderColor}" Margin="0,10"/>
+
+            <Grid x:Name="GeneralGrid" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <TextBlock x:Name="HintText" Style="{StaticResource Caption}" HorizontalAlignment="Center"
+                       TextAlignment="Center" TextWrapping="Wrap" Margin="0,12,0,12" MinHeight="28"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="DoneButton" Content="DONE" Style="{StaticResource SmallButton}" Background="{StaticResource AccentBrush}"
+                        Foreground="{StaticResource DarkTextColor}" FontWeight="Bold" Click="DoneButton_Click"/>
+                <Button x:Name="ResetButton" Content="DEFAULTS" Style="{StaticResource SmallButton}" Click="ResetButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

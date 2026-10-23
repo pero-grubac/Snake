@@ -5,83 +5,138 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Snake"
         mc:Ignorable="d"
-        Title="Blavor" Height="500" Width="800"
-        MinHeight="300" MinWidth="300"
-        Background="{StaticResource BackgroundColor}"
+        Title="Blavor" Height="720" Width="1000"
+        MinHeight="420" MinWidth="520"
+        Background="{StaticResource WindowBackground}"
         Foreground="{StaticResource TextColor}"
         FontFamily="{StaticResource MainFont}"
         WindowStartupLocation="CenterScreen"
         Icon="Slike/icon.ico"
-        PreviewKeyDown="Window_PreviewKeyDown"
-        KeyDown="Window_KeyDown">
+        PreviewKeyDown="Window_PreviewKeyDown">
 
-    <Viewbox>
-        <Grid>
-
+    <Viewbox Margin="12">
+        <Grid x:Name="Root" Margin="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="34" />
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock x:Name="MapText"
-                        Grid.Row="0"
+            <!-- Header: logo on the left, live stats on the right -->
+            <Grid Grid.Row="0" Margin="4,0,4,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center" Margin="0,0,24,0">
+                    <TextBlock Text="BLAVOR" Style="{StaticResource LogoText}"/>
+                    <TextBlock x:Name="ModeText" Style="{StaticResource Caption}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Style="{StaticResource StatCard}">
+                        <StackPanel>
+                            <TextBlock x:Name="P1Label" Text="SCORE" Style="{StaticResource Caption}"/>
+                            <TextBlock x:Name="P1ScoreText" Text="0" FontSize="22" FontWeight="Bold"
+                                       Foreground="{StaticResource AccentBrush}" RenderTransformOrigin="0,0.5">
+                                <TextBlock.RenderTransform>
+                                    <ScaleTransform x:Name="P1ScoreScale"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="P2Card" Style="{StaticResource StatCard}" Visibility="Collapsed">
+                        <StackPanel>
+                            <TextBlock Text="PLAYER 2" Style="{StaticResource Caption}"/>
+                            <TextBlock x:Name="P2ScoreText" Text="0" FontSize="22" FontWeight="Bold"
+                                       Foreground="{StaticResource Accent2Brush}" RenderTransformOrigin="0,0.5">
+                                <TextBlock.RenderTransform>
+                                    <ScaleTransform x:Name="P2ScoreScale"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="BestCard" Style="{StaticResource StatCard}">
+                        <StackPanel>
+                            <TextBlock Text="BEST" Style="{StaticResource Caption}"/>
+                            <TextBlock x:Name="BestText" Text="0" FontSize="22" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource StatCard}">
+                        <StackPanel>
+                            <TextBlock Text="SPEED" Style="{StaticResource Caption}"/>
+                            <TextBlock x:Name="SpeedText" Text="NORMAL" FontSize="15" FontWeight="Bold" Margin="0,4,0,3"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+            <!-- Board, with every screen drawn on top of it -->
+            <Grid x:Name="BoardArea" Grid.Row="1" MinWidth="480" MinHeight="424">
+                <Border x:Name="GridBorder"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        FontSize="22"
-                        Margin="10,10,10,0"/>
-
-            <TextBlock x:Name="ScoreText"
-                        Grid.Row="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="22"
-                        Margin="10,0,10,10"/>
-
-
-
-            <Border x:Name="GridBorder"
-                        Grid.Row="2"
+                        Background="{StaticResource GridBackgroundColor}"
                         BorderBrush="{StaticResource GridLineColor}"
-                        BorderThickness="1.5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        RenderOptions.EdgeMode="Aliased"
-                        Margin="20,0,20,10">
-                <UniformGrid x:Name="GameGrid"
-                             Width="400"
-                             Height="400"
-                             Background="{StaticResource GridBackgroundColor}"
-                             SnapsToDevicePixels="True"
-                             RenderOptions.BitmapScalingMode="HighQuality"/>
-            </Border>
-            <Border x:Name="Overlay"
-                        Grid.Row="2"
-                        Background="{StaticResource OverlayColor}"
-                        Width="{Binding ActualWidth, ElementName=GridBorder}"
-                        Height="{Binding ActualHeight, ElementName=GridBorder}"
-                        Margin="{Binding Margin, ElementName=GridBorder}"
-                        RenderOptions.EdgeMode="Aliased">
-                <TextBlock x:Name="OverlayText"
-                           Text="PRES ANY KEY TO START"
-                           FontSize="26"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           TextWrapping="Wrap"
-                           />
-            </Border>
-            <Button Content="Settings"
-                Grid.Row="3"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Height="27"
-                    Margin="0,0,0,7"
-                Padding="5"
-                RenderTransformOrigin="0.453,1.649" Grid.RowSpan="2"
-                Click="SettingsButton_Click"/>
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Padding="6">
+                    <Border.Effect>
+                        <DropShadowEffect x:Name="BoardGlow" BlurRadius="40" ShadowDepth="0" Opacity="0.35" Color="{StaticResource AccentColor}"/>
+                    </Border.Effect>
+                    <UniformGrid x:Name="GameGrid"
+                                 Width="400"
+                                 Height="400"
+                                 SnapsToDevicePixels="True"
+                                 RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Border>
+
+                <Border x:Name="PausedBadge"
+                        HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0"
+                        Background="{StaticResource AccentBrush}" CornerRadius="12" Padding="16,5"
+                        Visibility="Collapsed">
+                    <TextBlock x:Name="PausedText" Text="PAUSED" Foreground="{StaticResource DarkTextColor}" FontWeight="Bold" FontSize="13"/>
+                </Border>
+
+                <Border x:Name="Overlay" Background="{StaticResource OverlayColor}" CornerRadius="10">
+                    <Grid>
+                        <!-- Main menu -->
+                        <Border x:Name="MenuPanel" Style="{StaticResource Card}" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="34,24">
+                            <StackPanel KeyboardNavigation.DirectionalNavigation="Cycle">
+                                <TextBlock Text="BLAVOR" Style="{StaticResource LogoText}" FontSize="46" HorizontalAlignment="Center"/>
+                                <TextBlock Text="EAT MICE · GROW · DON'T BITE YOURSELF" Style="{StaticResource Caption}"
+                                           HorizontalAlignment="Center" Margin="0,0,0,18"/>
+                                <Button x:Name="OnePlayerButton" Content="1 PLAYER" Style="{StaticResource PrimaryButton}" Click="OnePlayerButton_Click"/>
+                                <Button x:Name="TwoPlayersButton" Content="2 PLAYERS" Style="{StaticResource MenuButton}" Click="TwoPlayersButton_Click"/>
+                                <Button x:Name="SettingsButton" Content="SETTINGS" Style="{StaticResource MenuButton}" Click="SettingsButton_Click"/>
+                                <Button x:Name="ControlsButton" Content="CONTROLS" Style="{StaticResource MenuButton}" Click="ControlsButton_Click"/>
+                                <Button x:Name="QuitButton" Content="QUIT" Style="{StaticResource MenuButton}" Click="QuitButton_Click"/>
+                                <TextBlock x:Name="MenuBestText" Style="{StaticResource Caption}" HorizontalAlignment="Center" Margin="0,12,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <local:SettingsPanel x:Name="SettingsView" Visibility="Collapsed"/>
+                        <local:ControlsPanel x:Name="ControlsView" Visibility="Collapsed"/>
+
+                        <!-- Countdown and game over -->
+                        <StackPanel x:Name="MessagePanel" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+                            <TextBlock x:Name="MessageText" FontSize="64" FontWeight="Bold" HorizontalAlignment="Center"
+                                       Foreground="{StaticResource LogoBrush}" RenderTransformOrigin="0.5,0.5" TextAlignment="Center">
+                                <TextBlock.RenderTransform>
+                                    <ScaleTransform x:Name="MessageScale"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            <TextBlock x:Name="MessageDetail" FontSize="18" HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                            <StackPanel x:Name="ResultButtons" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,24,0,0"
+                                        KeyboardNavigation.DirectionalNavigation="Cycle">
+                                <Button x:Name="PlayAgainButton" Content="PLAY AGAIN" Style="{StaticResource PrimaryButton}" Width="180" Margin="6,0" Click="PlayAgainButton_Click"/>
+                                <Button x:Name="BackToMenuButton" Content="MENU" Style="{StaticResource MenuButton}" Width="180" Margin="6,0" Click="BackToMenuButton_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <TextBlock x:Name="HintText" Grid.Row="2" Style="{StaticResource Caption}" HorizontalAlignment="Center" Margin="0,12,0,0"/>
         </Grid>
     </Viewbox>
-
-
 </Window>

@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+    paths-ignore: &docs
+      - '**.md'
+      - 'LICENCE.txt'
+      - 'readme_assets/**'
+      - '.gitignore'
+      - '.gitattributes'
+  pull_request:
+    branches: [master]
+    paths-ignore: *docs
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    name: Build & test
+    # WPF only builds on Windows.
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: '**/*.csproj'
+
+      - name: Restore
+        run: dotnet restore Snake.sln
+
+      - name: Build
+        run: dotnet build Snake.sln --configuration Release --no-restore
+
+      # UI tests start the real game and need a desktop session; they run locally.
+      - name: Test
+        run: >
+          dotnet test Snake.sln --configuration Release --no-build
+          --filter "Category!=UI"
+          --logger "trx;LogFileName=results.trx"
+          --collect "XPlat Code Coverage"
+          --results-directory TestResults
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults
+          retention-days: 7
