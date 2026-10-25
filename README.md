@@ -12,7 +12,7 @@
 
 **The classic Snake for the Windows desktop, with a second player, wrap-around walls, rising speed, remappable keys and a record for every map size.**
 
-<img src="readme_assets/gameplay.gif" alt="A full round: the main menu, the countdown, the snake eating mice, pausing, then steering into the top wall on purpose and the game-over screen" width="760">
+<img src="readme_assets/gameplay.gif" alt="A round in demo mode: 1 PLAYER from the menu, the countdown, the bot snake eating mice, pausing and resuming, then taking over and steering into the top wall for the game-over screen" width="760">
 
 </div>
 
